@@ -59,13 +59,14 @@ public class TermDetail extends AppCompatActivity {
         Term term;
 
         if(termID == -1){
-            int newID = repo.getAllTerms().get(repo.getAllTerms().size() - 1).getTermID() + 1;
-            term = new Term(newID, editTitle.getText().toString(), editStart.getText().toString(), editEnd.getText().toString());
+            term = new Term(editTitle.getText().toString(), editStart.getText().toString(), editEnd.getText().toString());
             repo.insert(term);
+            finish();
         }
         else{
             term = new Term(termID, editTitle.getText().toString(), editStart.getText().toString(), editEnd.getText().toString());
             repo.update(term);
+            finish();
         }
     }
 

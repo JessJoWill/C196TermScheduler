@@ -49,4 +49,16 @@ public class TermList extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        RecyclerView recyclerView = findViewById(R.id.termRecyclerView);
+        Repository repo = new Repository(getApplication());
+        List<Term> terms = repo.getAllTerms();
+        final TermAdapter adapter = new TermAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setmTerms(terms);
+    }
 }
