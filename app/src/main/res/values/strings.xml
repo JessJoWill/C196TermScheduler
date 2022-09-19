@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">C196_Scheduler</string>
+    <string name="remove_course">Remove Course</string>
+    <string name="add_course">Add Course</string>
+    <string name="save_term">Save Term</string>
+    <string name="cancel">Cancel</string>
+</resources>
