@@ -9,23 +9,20 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import jess.williams.c196_scheduler.Entity.Term;
+import jess.williams.c196_scheduler.Entity.Instructor;
 
 @Dao
-public interface TermDAO {
-
+public interface InstructorDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Term term);
+    void insert(Instructor instructor);
 
     @Update
-    void update(Term term);
+    void update(Instructor instructor);
 
     @Delete
-    void delete(Term term);
+    void delete(Instructor instructor);
 
-    @Query("SELECT * FROM terms")
-    List<Term> getAllTerms();
-
-   @Query("SELECT termTitle FROM terms WHERE termID = :termID")
-    String getCurrentTermTitle(int termID);
+    @Query("SELECT * FROM instructors")
+    List<Instructor> getAllInstructors();
 }
+

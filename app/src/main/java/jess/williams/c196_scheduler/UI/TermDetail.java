@@ -10,7 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import jess.williams.c196_scheduler.Database.Repository;
@@ -33,7 +36,12 @@ public class TermDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_detail);
 
-        editTitle=(EditText) findViewById(R.id.editTermTitle);
+        String dateFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+        String currentDate = sdf.format(new Date());
+
+
+        /*editTitle=(EditText) findViewById(R.id.editTermTitle);
         editStart=(EditText) findViewById(R.id.editStartDate);
         editEnd=(EditText) findViewById(R.id.editEndDate);
         termID=getIntent().getIntExtra("id", -1);
@@ -42,7 +50,7 @@ public class TermDetail extends AppCompatActivity {
         termEnd=getIntent().getStringExtra("termEnd");
         editTitle.setText(title);
         editStart.setText(termStart);
-        editEnd.setText(termEnd);
+        editEnd.setText(termEnd);*/
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -82,33 +90,24 @@ public class TermDetail extends AppCompatActivity {
                 return true;
             case R.id.saveTerm:
                 onSave(termID);
+                finish();
                 return true;
             case R.id.deleteTerm:
-                // onDelete(termID);
+                Term term = new Term();
+                onDelete(term);
+                finish();
                 return true;
-
+            case R.id.addCourse:
+                addCourse();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
- /*   private void onDelete(int view) {
-        List<Course> mAssociatedCourses = null;
-        repo.getAssociatedCourses(termID);
-        if(mAssociatedCourses.size() == 0){
-            new AlertDialog.Builder(this)
-                    .setTitle("Delete Term")
-                    .setMessage("Do you really want to delete " + title + "?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            TermDAO.deleteByTermId(termID);
-                            Toast.makeText(TermDetail.this, title + " deleted.", Toast.LENGTH_SHORT).show();
-                        }})
-                    .setNegativeButton(android.R.string.no, null).show();
-
-        }
-    }*/
+    private void onDelete(Term term) {
+        term.setTermID(termID);
+        repo.delete(term);
+    }
 
     private void addCourse() {
         Intent toAddCourse = new Intent(TermDetail.this, CourseDetail.class);

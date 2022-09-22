@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import jess.williams.c196_scheduler.Database.Repository;
 import jess.williams.c196_scheduler.Entity.Course;
+import jess.williams.c196_scheduler.Entity.Term;
 import jess.williams.c196_scheduler.R;
 
 public class TermDetailAdapter extends RecyclerView.Adapter<TermDetailAdapter.TermDetailViewHolder> {
@@ -28,12 +31,13 @@ public class TermDetailAdapter extends RecyclerView.Adapter<TermDetailAdapter.Te
                     int position = getAdapterPosition();
                     final Course current = mAssociatedCourses.get(position);
                     Intent intent = new Intent(context, CourseDetail.class);
-                    intent.putExtra("id", current.getCourseID());
-                    intent.putExtra("title", current.getCourseTitle());
+                    intent.putExtra("courseId", current.getCourseID());
+                    intent.putExtra("termId", current.getTermID());
+                    intent.putExtra("courseTitle", current.getCourseTitle());
                     intent.putExtra("courseStart", current.getCourseStart());
                     intent.putExtra("courseEnd", current.getCourseEnd());
                     intent.putExtra("courseStatus", current.getCourseStatus());
-                    intent.putExtra("courseNotes", current.getCourseNotes());
+                    intent.putExtra("instructorId", current.getInstructorID());
                     context.startActivity(intent);
                 }
             });

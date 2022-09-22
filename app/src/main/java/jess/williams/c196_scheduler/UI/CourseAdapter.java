@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import jess.williams.c196_scheduler.Entity.Assessment;
 import jess.williams.c196_scheduler.Entity.Course;
 import jess.williams.c196_scheduler.Entity.Term;
 import jess.williams.c196_scheduler.R;
@@ -28,22 +29,20 @@ public class CourseAdapter extends RecyclerView.Adapter<jess.williams.c196_sched
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    final Course current = mAssociatedCourses.get(position);
-                    Intent intent = new Intent(context, CourseDetail.class);
+                    final Assessment current = mAssociatedAssessments.get(position);
+                    Intent intent = new Intent(context, AssessmentDetail.class);
                     intent.putExtra("id", current.getCourseID());
-                    intent.putExtra("termId", current.getTermID());
-                    intent.putExtra("title", current.getCourseTitle());
-                    intent.putExtra("courseStart", current.getCourseStart());
-                    intent.putExtra("courseEnd", current.getCourseEnd());
-                    intent.putExtra("courseStatus", current.getCourseStatus());
-                    intent.putExtra("courseNotes", current.getCourseNotes());
+                    intent.putExtra("title", current.getAssessmentTitle());
+                    intent.putExtra("type", current.getAssessmentType());
+                    intent.putExtra("assessmentStart", current.getAssessmentStart());
+                    intent.putExtra("assessmentEnd", current.getAssessmentEnd());
                     context.startActivity(intent);
                 }
             });
         }
     }
 
-    private List<Course> mAssociatedCourses;
+    private List<Assessment> mAssociatedAssessments;
     private final Context context;
     private final LayoutInflater mInflater;
 
@@ -54,31 +53,31 @@ public class CourseAdapter extends RecyclerView.Adapter<jess.williams.c196_sched
 
     @NonNull
     @Override
-    public jess.williams.c196_scheduler.UI.CourseAdapter.CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CourseAdapter.CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.recycler_list_item, parent, false);
-        return new jess.williams.c196_scheduler.UI.CourseAdapter.CourseViewHolder(itemView);
+        return new CourseViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull jess.williams.c196_scheduler.UI.CourseAdapter.CourseViewHolder holder, int position) {
-        if (mAssociatedCourses != null) {
-            Course current = mAssociatedCourses.get(position);
-            String title = current.getCourseTitle();
+    public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
+        if (mAssociatedAssessments.size() > 0) {
+            Assessment current = mAssociatedAssessments.get(position);
+            String title = current.getAssessmentTitle();
             holder.courseItemView.setText(title);
         } else {
-            holder.courseItemView.setText("No course selected");
+            holder.courseItemView.setText("No assessments selected");
         }
     }
 
-    public void setmCourses(List<Course> courses) {
-        mAssociatedCourses = courses;
+    public void setmAssessments(List<Assessment> assessments) {
+        mAssociatedAssessments = assessments;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (mAssociatedCourses != null) {
-            return mAssociatedCourses.size();
+        if (mAssociatedAssessments != null) {
+            return mAssociatedAssessments.size();
         } else {
             return 0;
         }

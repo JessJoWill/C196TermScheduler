@@ -37,6 +37,11 @@ public class Assessment {
         this.assessmentEnd = assessmentEnd;
     }
 
+    public Assessment() {
+
+    }
+
+
     public int getAssessmentID() {
         return assessmentID;
     }

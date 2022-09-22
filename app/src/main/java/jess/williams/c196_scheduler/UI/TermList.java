@@ -1,5 +1,6 @@
 package jess.williams.c196_scheduler.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,8 +44,8 @@ public class TermList extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.addTerm:
-                return true;
-            case R.id.deleteTerm:
+                Intent intent = new Intent(TermList.this, TermDetail.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

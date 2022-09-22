@@ -10,6 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import jess.williams.c196_scheduler.Entity.Assessment;
+import jess.williams.c196_scheduler.Entity.Course;
 
 @Dao
 public interface AssessmentDAO {
@@ -24,4 +25,7 @@ public interface AssessmentDAO {
 
     @Query("SELECT * FROM assessments")
     List<Assessment> getAllAssessments();
+
+    @Query("SELECT * FROM assessments WHERE courseID = :courseID")
+    List<Assessment> getAssociatedAssessments(int courseID);
 }

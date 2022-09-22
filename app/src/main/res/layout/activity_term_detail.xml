@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Term Title:"
+            android:text="@string/term_title"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -25,41 +25,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter title"
+            android:hint="@string/enter_title"
             android:inputType="textPersonName"
             android:textSize="24sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start Date:"
+            android:text="@string/start_date"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editStartDate"
+            android:id="@+id/editTermStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/enter_start_date"
             android:ems="10"
-            android:hint="Enter start date"
-            android:inputType="date"
-            android:textSize="24sp" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="End Date:"
+            android:text="@string/end_date"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editEndDate"
+        <!--<EditText
+            android:id="@+id/editTermEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/enter_end_date"
             android:ems="10"
-            android:hint="Enter end date"
-            android:inputType="date"
-            android:textSize="24sp" />
+            android:inputType="textPersonName" />-->
 
         <View
             android:layout_width="match_parent"
@@ -69,7 +67,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Associated Courses:"
+            android:text="@string/associated_courses"
             android:textSize="24sp"
             android:textStyle="bold" />
 
