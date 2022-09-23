@@ -31,7 +31,8 @@ public class CourseAdapter extends RecyclerView.Adapter<jess.williams.c196_sched
                     int position = getAdapterPosition();
                     final Assessment current = mAssociatedAssessments.get(position);
                     Intent intent = new Intent(context, AssessmentDetail.class);
-                    intent.putExtra("id", current.getCourseID());
+                    intent.putExtra("assessmentId", current.getAssessmentID());
+                    intent.putExtra("courseId", current.getCourseID());
                     intent.putExtra("title", current.getAssessmentTitle());
                     intent.putExtra("type", current.getAssessmentType());
                     intent.putExtra("assessmentStart", current.getAssessmentStart());

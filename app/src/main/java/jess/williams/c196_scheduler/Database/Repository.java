@@ -27,8 +27,9 @@ public class Repository {
     private List<Assessment> mAllAssessments;
     public List<Course> mAssociatedCourses;
     public List<Assessment> mAssociatedAssessments;
-    public List<Instructor> mAllInstructors;
+    public List<String> mAllInstructors;
     private String termTitle;
+    private String courseTitle;
     public List<Course_Note> mAssociatedNotes;
 
     private static int NUMBER_OF_THREADS=4;
@@ -116,6 +117,18 @@ public class Repository {
             e.printStackTrace();
         }
         return mAssociatedCourses;
+    }
+
+    public String getCurrentCourseTitle(int courseID){
+        databaseExecutor.execute(()->{
+            courseTitle=mCourseDAO.getCurrentCourseTitle(courseID);
+        });
+        try{
+            Thread.sleep(1000);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        return courseTitle;
     }
 
     public void insert(Course course){
@@ -262,7 +275,7 @@ public class Repository {
     // -----------------------------
     // Instructor queries
     // -----------------------------
-    public List<Instructor>getAllInstructors() {
+    public List<String>getAllInstructors() {
         databaseExecutor.execute(()->{
             mAllInstructors=mInstructorDAO.getAllInstructors();
         });

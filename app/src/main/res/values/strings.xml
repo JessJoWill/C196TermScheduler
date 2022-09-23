@@ -17,5 +17,16 @@
     <string name="enter_title">Enter title</string>
     <string name="term_title">Term Title:</string>
     <string name="associated_courses">Associated Courses:</string>
+    <string name="associated_assessments">Associated Assessments:</string>
+    <string name="course_instructor">Course Instructor:</string>
+    <string name="course_status">Course Status:</string>
+    <string name="enter_term_title">Enter term title</string>
+    <string name="enter_course_title">Enter course title</string>
+    <string name="course_title">Course Title:</string>
+    <string name="assessment_type">Assessment Type:</string>
+    <string name="enter_assessment_title">Enter assessment title</string>
+    <string name="assessment_title">Assessment Title:</string>
+    <string name="set_start_alert">Set Start Alert</string>
+    <string name="set_end_alert">Set End Alert</string>
 
 </resources>

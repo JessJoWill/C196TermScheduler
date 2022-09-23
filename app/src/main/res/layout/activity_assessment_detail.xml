@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Assessment Title:"
+            android:text="@string/assessment_title"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -27,13 +27,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter assessment title"
+            android:hint="@string/enter_assessment_title"
             android:inputType="textPersonName"
             android:textSize="24sp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Title:"
+            android:text="@string/course_title"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -42,14 +42,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter course title"
+            android:hint="@string/enter_course_title"
             android:inputType="textPersonName"
             android:textSize="24sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Assessment Type:"
+            android:text="@string/assessment_type"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -64,34 +64,28 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start Date:"
+            android:text="@string/start_date"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editAssessmentStart"
+        <Button
+            android:id="@+id/assessmentStartBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Enter start date"
-            android:inputType="date"
-            android:textSize="24sp" />
+            android:ems="10" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="End Date:"
+            android:text="@string/end_date"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editAssessmentEnd"
+        <Button
+            android:id="@+id/assessmentEndBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Enter end date"
-            android:inputType="date"
-            android:textSize="24sp" />
+            android:ems="10" />
 
         <View
             android:id="@+id/divider"
@@ -110,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:layout_weight="1"
-                android:text="Set Start Alert" />
+                android:text="@string/set_start_alert" />
 
             <CheckBox
                 android:id="@+id/endAlertCheckBox"
@@ -118,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:layout_weight="1"
-                android:text="Set End Alert" />
+                android:text="@string/set_end_alert" />
         </LinearLayout>
 
     </LinearLayout>

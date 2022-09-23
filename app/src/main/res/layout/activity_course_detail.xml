@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Title:"
+            android:text="@string/course_title"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -27,13 +27,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter course title"
+            android:hint="@string/enter_course_title"
             android:inputType="textPersonName"
             android:textSize="24sp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Term Title:"
+            android:text="@string/term_title"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -42,46 +42,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter term title"
+            android:hint="@string/enter_term_title"
             android:inputType="textPersonName"
             android:textSize="24sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start Date:"
+            android:text="@string/start_date"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editStartDate"
+        <Button
+            android:id="@+id/courseStartBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter start date"
-            android:inputType="date"
-            android:textSize="24sp" />
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="End Date:"
+            android:text="@string/end_date"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editEndDate"
+        <Button
+            android:id="@+id/courseEndBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter end date"
-            android:inputType="date"
-            android:textSize="24sp" />
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Status:"
+            android:text="@string/course_status"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -96,7 +92,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Instructor:"
+            android:text="@string/course_instructor"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -116,7 +112,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Associated Assessments:"
+            android:text="@string/associated_assessments"
             android:textSize="24sp"
             android:textStyle="bold" />
 

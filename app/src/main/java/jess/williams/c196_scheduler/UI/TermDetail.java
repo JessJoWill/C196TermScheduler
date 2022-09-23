@@ -137,8 +137,6 @@ public class TermDetail extends AppCompatActivity {
         String start = termStartBtn.getText().toString();
         String end = termEndBtn.getText().toString();
 
-
-
         if(termID == -1){
             term = new Term(editTitle.getText().toString(), start, end);
             repo.insert(term);
