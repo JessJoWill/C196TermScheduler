@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         repo.insert(instructor3);
         repo.insert(instructor4);
         repo.insert(instructor5);
-        Term term1 = new Term("First Term", "2022-05-01", "2022-10-31");
-        Term term2 = new Term("Second Term", "2022-11-01", "2023-4-30");
-        Term term3 = new Term("Third Term", "2023-05-01", "2023-10-31");
-        Term term4 = new Term("Fourth Term", "2023-11-01", "2024-04-30");
+        Term term1 = new Term("First Term", "5/1/22", "10/31/22");
+        Term term2 = new Term("Second Term", "11/1/22", "4/30/23");
+        Term term3 = new Term("Third Term", "5/1/23", "10/31/23");
+        Term term4 = new Term("Fourth Term", "11/1/23", "4/30/24");
         repo.insert(term1);
         repo.insert(term2);
         repo.insert(term3);

@@ -36,13 +36,11 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTermStart"
+        <Button
+            android:id="@+id/termStartBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_start_date"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:ems="10" />
 
         <TextView
             android:layout_width="match_parent"
@@ -51,13 +49,11 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!--<EditText
-            android:id="@+id/editTermEnd"
+        <Button
+            android:id="@+id/termEndBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_end_date"
-            android:ems="10"
-            android:inputType="textPersonName" />-->
+            android:ems="10" />
 
         <View
             android:layout_width="match_parent"

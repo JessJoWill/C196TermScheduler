@@ -1,8 +1,12 @@
 package jess.williams.c196_scheduler.Entity;
 
+import android.app.DatePickerDialog;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import java.util.Date;
 
 @Entity(tableName = "terms")
 public class Term {
