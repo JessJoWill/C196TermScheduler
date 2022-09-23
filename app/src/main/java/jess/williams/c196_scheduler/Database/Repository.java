@@ -27,7 +27,7 @@ public class Repository {
     private List<Assessment> mAllAssessments;
     public List<Course> mAssociatedCourses;
     public List<Assessment> mAssociatedAssessments;
-    public List<String> mAllInstructors;
+    public List<Instructor> mAllInstructors;
     private String termTitle;
     private String courseTitle;
     public List<Course_Note> mAssociatedNotes;
@@ -275,13 +275,13 @@ public class Repository {
     // -----------------------------
     // Instructor queries
     // -----------------------------
-    public List<String>getAllInstructors() {
+    public List<Instructor>getAllInstructors() {
         databaseExecutor.execute(()->{
             mAllInstructors=mInstructorDAO.getAllInstructors();
         });
         try{
             Thread.sleep(1000);
-        }catch(InterruptedException e){
+        }catch(Exception e){
             e.printStackTrace();
         }
         return mAllInstructors;

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,7 +46,12 @@ public class CourseDetail extends AppCompatActivity {
     String courseTitle;
     String termTitle;
     String statusStr;
+    String selectedInstructorName;
+    TextView instructorEmail;
+    TextView instructorPhone;
     String instructorName;
+    String email;
+    String phone;
     Button courseStartBtn;
     Button courseEndBtn;
     Spinner statusSpinner;
@@ -147,23 +154,49 @@ public class CourseDetail extends AppCompatActivity {
         // Instructor Spinner
 
         instructorSpinner=(Spinner) findViewById(R.id.instructorSpinner);
-        ArrayList<String> mAllInstructors = new ArrayList();
-        repo.getAllInstructors();
+        List<Instructor> mAllInstructors = new ArrayList();
+        mAllInstructors.addAll(repo.getAllInstructors());
         int instructorPosition = 0;
-        for(String string : mAllInstructors){
-            if(string == instructorName){
-                instructorPosition = mAllInstructors.indexOf(string);
+        List<String> instructorNames = new ArrayList<>();
+        for(Instructor instructor : mAllInstructors){
+            instructorNames.add(instructor.getInstructorName());
+            if(instructor.getInstructorID() == instructorID){
+                instructorPosition = instructorID - 1;
+                email = instructor.getInstructorEmail();
+                phone = instructor.getInstructorPhone();
             }
         }
 
 
-        ArrayAdapter<String> instructorArrayAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, mAllInstructors);
+        ArrayAdapter<String> instructorArrayAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, instructorNames);
         instructorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         instructorSpinner.setAdapter(instructorArrayAdapter);
-        instructorSpinner.setSelection(instructorPosition);
+        instructorSpinner.setSelection(instructorPosition, false);
 
         editCourseTitle.setText(courseTitle);
         editTermTitle.setText(termTitle);
+        instructorEmail = (TextView) findViewById(R.id.instructorEmailTxt);
+        instructorPhone = (TextView) findViewById(R.id.instructorPhoneTxt);
+
+        getInstructorDetails();
+        instructorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                instructorID = instructorSpinner.getSelectedItemPosition();
+
+                Instructor currentInstructor = mAllInstructors.get(instructorID);
+                email = currentInstructor.getInstructorEmail();
+                phone = currentInstructor.getInstructorPhone();
+                getInstructorDetails();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                instructorEmail.setText("");
+                instructorPhone.setText("");
+            }
+        });
+
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -174,6 +207,11 @@ public class CourseDetail extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.setmAssessments(assessments);
+    }
+
+    public void getInstructorDetails(){
+        instructorEmail.setText(email);
+        instructorPhone.setText(phone);
     }
 
     private void updateLabel(){

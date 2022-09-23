@@ -23,9 +23,6 @@ public interface CourseDAO {
     @Delete
     void delete(Course course);
 
-    /*@Query("SELECT * FROM courses")
-    List<Course> getAllCourses();*/
-
     @Query("SELECT * FROM courses WHERE termID = :termID")
     List<Course> getAssociatedCourses(int termID);
 

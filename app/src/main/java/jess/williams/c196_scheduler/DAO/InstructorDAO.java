@@ -22,7 +22,7 @@ public interface InstructorDAO {
     @Delete
     void delete(Instructor instructor);
 
-    @Query("SELECT instructorName FROM instructors")
-    List<String> getAllInstructors();
+    @Query("SELECT * FROM instructors")
+    List<Instructor> getAllInstructors();
 }
 

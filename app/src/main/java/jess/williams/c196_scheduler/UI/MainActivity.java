@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, TermList.class);
         startActivity(intent);
 
-        /*Repository repo=new Repository(getApplication());
+/*        Repository repo=new Repository(getApplication());
         Instructor instructor1 = new Instructor("Oliver Clarke", "555-664-3674", "oclarke@school.edu");
         Instructor instructor2 = new Instructor("Charlotte Hansen", "555-623-4912", "chansen@school.org");
         Instructor instructor3 = new Instructor("Steven Black", "555-623-8267", "sblack@school.org");
