@@ -46,10 +46,8 @@ public class CourseDetail extends AppCompatActivity {
     String courseTitle;
     String termTitle;
     String statusStr;
-    String selectedInstructorName;
     TextView instructorEmail;
     TextView instructorPhone;
-    String instructorName;
     String email;
     String phone;
     Button courseStartBtn;
@@ -167,7 +165,6 @@ public class CourseDetail extends AppCompatActivity {
             }
         }
 
-
         ArrayAdapter<String> instructorArrayAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, instructorNames);
         instructorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         instructorSpinner.setAdapter(instructorArrayAdapter);
@@ -259,6 +256,9 @@ public class CourseDetail extends AppCompatActivity {
             case R.id.addAssessment:
                 addAssessment();
                 return true;
+            case R.id.courseNotes:
+                courseNotes();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -271,5 +271,17 @@ public class CourseDetail extends AppCompatActivity {
     private void addAssessment() {
         Intent toAddAssessment = new Intent(CourseDetail.this, AssessmentDetail.class);
         startActivity(toAddAssessment);
+    }
+
+    private void courseNotes(){
+        Intent toCourseNotes = new Intent(CourseDetail.this, CourseNotesList.class);
+        toCourseNotes.putExtra("courseId", courseID);
+        toCourseNotes.putExtra("courseId", termID);
+        toCourseNotes.putExtra("courseId", courseTitle);
+        toCourseNotes.putExtra("courseId", courseStart);
+        toCourseNotes.putExtra("courseId", courseEnd);
+        toCourseNotes.putExtra("courseId", statusStr);
+        toCourseNotes.putExtra("courseId", instructorID);
+        startActivity(toCourseNotes);
     }
 }

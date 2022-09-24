@@ -2,6 +2,8 @@ package jess.williams.c196_scheduler.Entity;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -17,6 +19,13 @@ public class Course_Note {
     int noteID;
     int courseID;
     String noteTxt;
+
+    @Ignore
+    public Course_Note(int noteID, int courseID, String noteTxt) {
+        this.noteID = noteID;
+        this.courseID = courseID;
+        this.noteTxt = noteTxt;
+    }
 
     public Course_Note(int courseID, String noteTxt) {
         this.courseID = courseID;

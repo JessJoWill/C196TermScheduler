@@ -28,5 +28,6 @@
     <string name="assessment_title">Assessment Title:</string>
     <string name="set_start_alert">Set Start Alert</string>
     <string name="set_end_alert">Set End Alert</string>
+    <string name="course_notes">Course Notes</string>
 
 </resources>

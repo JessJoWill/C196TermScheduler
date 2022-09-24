@@ -9,6 +9,7 @@ import android.view.View;
 import jess.williams.c196_scheduler.Database.Repository;
 import jess.williams.c196_scheduler.Entity.Assessment;
 import jess.williams.c196_scheduler.Entity.Course;
+import jess.williams.c196_scheduler.Entity.Course_Note;
 import jess.williams.c196_scheduler.Entity.Instructor;
 import jess.williams.c196_scheduler.Entity.Term;
 import jess.williams.c196_scheduler.R;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, TermList.class);
         startActivity(intent);
 
-/*        Repository repo=new Repository(getApplication());
+        /*Repository repo=new Repository(getApplication());
         Instructor instructor1 = new Instructor("Oliver Clarke", "555-664-3674", "oclarke@school.edu");
         Instructor instructor2 = new Instructor("Charlotte Hansen", "555-623-4912", "chansen@school.org");
         Instructor instructor3 = new Instructor("Steven Black", "555-623-8267", "sblack@school.org");
@@ -92,6 +93,30 @@ public class MainActivity extends AppCompatActivity {
         repo.insert(assessment9);
         repo.insert(assessment10);
         repo.insert(assessment11);
-        repo.insert(assessment12);*/
+        repo.insert(assessment12);
+        Course_Note courseNote1 = new Course_Note(1, "Lorem ipsum dolor sit amet consectetur adipiscing elit, urna consequat felis vehicula class ultricies mollis dictumst, aenean non a in donec nulla. Phasellus ante pellentesque erat cum risus consequat imperdiet aliquam, integer placerat et turpis mi eros nec lobortis taciti, vehicula nisl litora tellus ligula porttitor metus.");
+        Course_Note courseNote2 = new Course_Note(2, "Note for Course 2");
+        Course_Note courseNote3 = new Course_Note(3, "Note for Course 3");
+        Course_Note courseNote4 = new Course_Note(4, "Note for Course 4");
+        Course_Note courseNote5 = new Course_Note(5, "Note for Course 5");
+        Course_Note courseNote6 = new Course_Note(6, "Note for Course 6");
+        Course_Note courseNote7 = new Course_Note(7, "Note for Course 7");
+        Course_Note courseNote8 = new Course_Note(8, "Note for Course 8");
+        Course_Note courseNote9 = new Course_Note(9, "Note for Course 9");
+        Course_Note courseNote10 = new Course_Note(10, "Note for Course 10");
+        Course_Note courseNote11 = new Course_Note(11, "Note for Course 11");
+        Course_Note courseNote12 = new Course_Note(12, "Note for Course 12");
+        repo.insert(courseNote1);
+        repo.insert(courseNote2);
+        repo.insert(courseNote3);
+        repo.insert(courseNote4);
+        repo.insert(courseNote5);
+        repo.insert(courseNote6);
+        repo.insert(courseNote7);
+        repo.insert(courseNote8);
+        repo.insert(courseNote9);
+        repo.insert(courseNote10);
+        repo.insert(courseNote11);
+        repo.insert(courseNote12);*/
     }
 }

@@ -18,7 +18,7 @@ import jess.williams.c196_scheduler.Entity.Course_Note;
 import jess.williams.c196_scheduler.Entity.Instructor;
 import jess.williams.c196_scheduler.Entity.Term;
 
-@Database(entities={Term.class, Course.class, Assessment.class, Instructor.class, Course_Note.class}, version=8, exportSchema = false)
+@Database(entities={Term.class, Course.class, Assessment.class, Instructor.class, Course_Note.class}, version=9, exportSchema = false)
 public abstract class SchedulerDBBuilder extends RoomDatabase {
     public abstract TermDAO termDAO();
     public abstract CourseDAO courseDAO();

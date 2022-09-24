@@ -190,17 +190,6 @@ public class Repository {
         }
     }
 
-    public void update(Course_Note courseNote){
-        databaseExecutor.execute(()->{
-            mNoteDAO.update(courseNote);
-        });
-        try {
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-    }
-
     public void delete(Course_Note courseNote){
         databaseExecutor.execute(()->{
             mNoteDAO.delete(courseNote);

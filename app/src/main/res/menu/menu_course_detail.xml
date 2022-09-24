@@ -10,6 +10,8 @@
         android:title="@string/delete_course"/>
     <item android:id="@+id/addAssessment"
         android:title="@string/add_assessment"/>
+    <item android:id="@+id/courseNotes"
+        android:title="@string/course_notes"/>
     <item android:id="@+id/cancel"
         android:title="@string/cancel"/>
 </menu>

@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.C196_Scheduler"
         tools:targetApi="31">
+        <activity android:name=".UI.CourseNotesList"
+            android:parentActivityName=".UI.CourseDetail"
+            android:label="Course Notes"
+            android:exported="false" />
         <activity android:name=".UI.AssessmentDetail"
             android:parentActivityName=".UI.CourseDetail"
             android:label="Assessment Detail"
