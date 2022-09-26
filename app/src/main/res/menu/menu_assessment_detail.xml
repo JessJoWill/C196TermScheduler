@@ -8,6 +8,8 @@
         android:title="@string/save_assessment"/>
     <item android:id="@+id/deleteAssessment"
         android:title="@string/delete_assessment"/>
-    <item android:id="@+id/cancel"
-        android:title="@string/cancel"/>
+    <item android:id="@+id/assessmentStartAlert"
+        android:title="Set Start Alert"/>
+    <item android:id="@+id/assessmentEndAlert"
+        android:title="Set End Alert"/>
 </menu>

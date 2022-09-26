@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +26,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import jess.williams.c196_scheduler.Database.Repository;
+import jess.williams.c196_scheduler.Entity.Assessment;
 import jess.williams.c196_scheduler.Entity.Course;
 import jess.williams.c196_scheduler.Entity.Term;
 import jess.williams.c196_scheduler.R;
@@ -68,13 +72,13 @@ public class TermDetail extends AppCompatActivity {
             }
         });
 
+
         termEndBtn=findViewById(R.id.termEndBtn);
         termEndBtn.setText(termEnd);
 
         termEndBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Date date;
                 String endInfo = termEndBtn.getText().toString();
                 try{
                     endCalendar.setTime(sdf.parse(endInfo));
@@ -136,14 +140,15 @@ public class TermDetail extends AppCompatActivity {
         Term term;
         String start = termStartBtn.getText().toString();
         String end = termEndBtn.getText().toString();
+        String title = editTitle.getText().toString();
 
         if(termID == -1){
-            term = new Term(editTitle.getText().toString(), start, end);
+            term = new Term(title, start, end);
             repo.insert(term);
             finish();
         }
         else{
-            term = new Term(termID, editTitle.getText().toString(), start, end);
+            term = new Term(termID, title, start, end);
             repo.update(term);
             finish();
         }
@@ -162,12 +167,19 @@ public class TermDetail extends AppCompatActivity {
             case R.id.saveTerm:
                 onSave(termID);
                 finish();
+                Toast.makeText(TermDetail.this, "Term Saved", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.deleteTerm:
-                Term term = new Term();
-                onDelete(term);
-                finish();
-                return true;
+                List<Course> mAssociatedCourses = repo.getAssociatedCourses(termID);
+                if(mAssociatedCourses.size() > 0){
+                    Toast.makeText(TermDetail.this, "Cannot delete term with associated courses.", Toast.LENGTH_LONG).show();
+                }else {
+                    Term term = new Term();
+                    onDelete(term);
+                    Toast.makeText(TermDetail.this, "Term Deleted", Toast.LENGTH_LONG).show();
+                    finish();
+                    return true;
+                }
             case R.id.addCourse:
                 addCourse();
                 return true;
@@ -178,10 +190,24 @@ public class TermDetail extends AppCompatActivity {
     private void onDelete(Term term) {
         term.setTermID(termID);
         repo.delete(term);
+        finish();
     }
 
     private void addCourse() {
         Intent toAddCourse = new Intent(TermDetail.this, CourseDetail.class);
+        toAddCourse.putExtra("termId", termID);
            startActivity(toAddCourse);
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
+        Repository repo = new Repository(getApplication());
+        List<Course> courses = repo.getAssociatedCourses(termID);
+        final TermDetailAdapter adapter = new TermDetailAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setmCourses(courses);
     }
 }

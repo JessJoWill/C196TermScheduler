@@ -1,6 +1,9 @@
 package jess.williams.c196_scheduler.UI;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,22 +32,25 @@ import java.util.Objects;
 import jess.williams.c196_scheduler.Database.Repository;
 import jess.williams.c196_scheduler.Entity.Assessment;
 import jess.williams.c196_scheduler.Entity.Course;
+import jess.williams.c196_scheduler.Entity.Instructor;
 import jess.williams.c196_scheduler.R;
 
 public class AssessmentDetail extends AppCompatActivity {
     Repository repo = new Repository(getApplication());
     EditText editAssessmentTitle;
-    EditText editCourseTitle;
     int assessmentID;
     int courseID;
     String assessmentTitle;
     String assessmentType;
     String assessmentStart;
     String assessmentEnd;
-    String courseTitle;
+    String selectedCourse;
+    List<Course> mAllCourses;
     Button assessmentStartBtn;
     Button assessmentEndBtn;
+    Spinner courseTitleSpinner;
     Spinner typeSpinner;
+    SimpleDateFormat sdf;
     DatePickerDialog.OnDateSetListener startDate;
     DatePickerDialog.OnDateSetListener endDate;
     final Calendar startCalendar = Calendar.getInstance();
@@ -60,7 +68,7 @@ public class AssessmentDetail extends AppCompatActivity {
         assessmentEnd=getIntent().getStringExtra("assessmentEnd");
         assessmentType=getIntent().getStringExtra("assessmentType");
         String dateFormat = "MM/dd/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+        sdf = new SimpleDateFormat(dateFormat, Locale.US);
         assessmentStartBtn=findViewById(R.id.assessmentStartBtn);
         assessmentStartBtn.setText(assessmentStart);
 
@@ -119,26 +127,42 @@ public class AssessmentDetail extends AppCompatActivity {
         };
 
         editAssessmentTitle=(EditText) findViewById(R.id.editAssessmentTitle);
-        editCourseTitle=(EditText) findViewById(R.id.editCourseTitle);
 
-        courseTitle = repo.getCurrentCourseTitle(courseID);
+        // Course Title Spinner
 
-        int position = 0;
+        courseTitleSpinner=(Spinner) findViewById(R.id.courseTitleSpinner);
+        mAllCourses = new ArrayList();
+        mAllCourses.addAll(repo.getAllCourses());
+        int coursePosition = 0;
+        List<String> courseTitles = new ArrayList<>();
+        for(Course course : mAllCourses){
+            courseTitles.add(course.getCourseTitle());
+            if(course.getCourseID() == courseID){
+                selectedCourse = course.getCourseTitle();
+            }
+        }
+
+        ArrayAdapter<String> courseArrayAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, courseTitles);
+        courseArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        courseTitleSpinner.setAdapter(courseArrayAdapter);
+        coursePosition = courseArrayAdapter.getPosition(selectedCourse);
+        courseTitleSpinner.setSelection(coursePosition, false);
+
+        int statusPosition = 0;
         String[] assessmentTypeArray = {"Objective", "Performance"};
         if(assessmentType == "Objective"){
-            position = 1;
+            statusPosition = 1;
         }else if(assessmentType == "Performance"){
-            position = 2;
+            statusPosition = 2;
         }
 
         typeSpinner = (Spinner) findViewById(R.id.typeSpinner);
         ArrayAdapter<String> typeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,assessmentTypeArray);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         typeSpinner.setAdapter(typeAdapter);
-        typeSpinner.setSelection(position);
+        typeSpinner.setSelection(statusPosition);
 
         editAssessmentTitle.setText(assessmentTitle);
-        editCourseTitle.setText(courseTitle);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -146,7 +170,7 @@ public class AssessmentDetail extends AppCompatActivity {
 
     private void updateLabel(){
         String dateFormat = "MM/dd/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+        sdf = new SimpleDateFormat(dateFormat, Locale.US);
 
         assessmentStartBtn.setText(sdf.format(startCalendar.getTime()));
         assessmentEndBtn.setText(sdf.format(endCalendar.getTime()));
@@ -154,13 +178,17 @@ public class AssessmentDetail extends AppCompatActivity {
 
     public void onSave(int view){
         Assessment assessment;
+        String title = editAssessmentTitle.getText().toString();
+        String type = typeSpinner.getSelectedItem().toString();
+        String start = assessmentStartBtn.getText().toString();
+        String end = assessmentEndBtn.getText().toString();
 
         if(assessmentID == -1){
-            assessment = new Assessment(courseID, assessmentTitle, assessmentType, assessmentStart, assessmentEnd);
+            assessment = new Assessment(courseID, title, type, start, end);
             repo.insert(assessment);
             finish();
         } else {
-            assessment = new Assessment(assessmentID, courseID, assessmentTitle, assessmentType, assessmentStart, assessmentEnd);
+            assessment = new Assessment(assessmentID, courseID, title, type, start, end);
             repo.update(assessment);
         }
     }
@@ -178,11 +206,46 @@ public class AssessmentDetail extends AppCompatActivity {
             case R.id.saveAssessment:
                 onSave(assessmentID);
                 finish();
+                Toast.makeText(AssessmentDetail.this, "Assessment Saved", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.deleteAssessment:
                 Assessment assessment = new Assessment();
                 onDelete(assessment);
                 finish();
+                Toast.makeText(AssessmentDetail.this, "Assessment Deleted", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.assessmentStartAlert:
+                String startDateTxt=assessmentStartBtn.getText().toString();
+                Date aStartDate = null;
+                try{
+                    aStartDate=sdf.parse(startDateTxt);
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                Long saTrigger = aStartDate.getTime();
+                Intent saIntent = new Intent(AssessmentDetail.this, MyReceiver.class);
+                assessmentTitle = editAssessmentTitle.getText().toString();
+                saIntent.putExtra("key", assessmentTitle + " starts today.");
+                PendingIntent saSender = PendingIntent.getBroadcast(AssessmentDetail.this,MainActivity.numAlert++,saIntent,0);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP,saTrigger,saSender);
+                Toast.makeText(AssessmentDetail.this, "Alert Added", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.assessmentEndAlert:
+                String endDateTxt=assessmentEndBtn.getText().toString();
+                Date endDate = null;
+                try{
+                    endDate=sdf.parse(endDateTxt);
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                Long endTrigger = endDate.getTime();
+                Intent eaIntent = new Intent(AssessmentDetail.this, MyReceiver.class);
+                eaIntent.putExtra("key", assessmentTitle + " ends today.");
+                PendingIntent eaSender = PendingIntent.getBroadcast(AssessmentDetail.this,MainActivity.numAlert++,eaIntent,0);
+                AlarmManager eaAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                eaAlarmManager.set(AlarmManager.RTC_WAKEUP,endTrigger,eaSender);
+                Toast.makeText(AssessmentDetail.this, "Alert Added", Toast.LENGTH_LONG).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

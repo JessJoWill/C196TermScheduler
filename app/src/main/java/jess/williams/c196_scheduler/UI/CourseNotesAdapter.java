@@ -1,5 +1,6 @@
 package jess.williams.c196_scheduler.UI;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -16,8 +17,6 @@ import jess.williams.c196_scheduler.Entity.Course_Note;
 import jess.williams.c196_scheduler.R;
 
 public class CourseNotesAdapter extends RecyclerView.Adapter<jess.williams.c196_scheduler.UI.CourseNotesAdapter.CourseNotesViewHolder> {
-
-
     class CourseNotesViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseNotesView;
 
@@ -29,10 +28,11 @@ public class CourseNotesAdapter extends RecyclerView.Adapter<jess.williams.c196_
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     final Course_Note current = mAssociatedNotes.get(position);
-                    Intent intent = new Intent(context, CourseNotesList.class);
-                    intent.putExtra("id", current.getNoteID());
+                    Intent intent = new Intent(context, NotesDetail.class);
+                    intent.putExtra("noteId", current.getNoteID());
                     intent.putExtra("courseId", current.getCourseID());
-                    intent.putExtra("noteTxt", current.getNoteTxt());
+                    intent.putExtra("noteSubject", current.getNoteSubject());
+                    intent.putExtra("noteBody", current.getNoteBody());
                     context.startActivity(intent);
                 }
             });
@@ -59,8 +59,9 @@ public class CourseNotesAdapter extends RecyclerView.Adapter<jess.williams.c196_
     public void onBindViewHolder(@NonNull CourseNotesViewHolder holder, int position) {
         if (mAssociatedNotes.size() > 0) {
             Course_Note current = mAssociatedNotes.get(position);
-            String noteTxt = current.getNoteTxt();
-            holder.courseNotesView.setText(noteTxt);
+            String noteBody = current.getNoteBody();
+            String noteSubject = current.getNoteSubject();
+            holder.courseNotesView.setText(noteSubject + ": " +noteBody);
         } else {
             holder.courseNotesView.setText("No notes added");
         }

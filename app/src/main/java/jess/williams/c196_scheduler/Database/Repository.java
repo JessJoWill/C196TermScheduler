@@ -24,13 +24,11 @@ public class Repository {
     private InstructorDAO mInstructorDAO;
     private NoteDAO mNoteDAO;
     private List<Term> mAllTerms;
-    private List<Assessment> mAllAssessments;
-    public List<Course> mAssociatedCourses;
-    public List<Assessment> mAssociatedAssessments;
-    public List<Instructor> mAllInstructors;
-    private String termTitle;
-    private String courseTitle;
-    public List<Course_Note> mAssociatedNotes;
+    private List<Course> mAllCourses;
+    private List<Course> mAssociatedCourses;
+    private List<Assessment> mAssociatedAssessments;
+    private List<Instructor> mAllInstructors;
+    private List<Course_Note> mAssociatedNotes;
 
     private static int NUMBER_OF_THREADS=4;
     static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
@@ -57,18 +55,6 @@ public class Repository {
             e.printStackTrace();
         }
         return mAllTerms;
-    }
-
-    public String getCurrentTermTitle(int termID){
-        databaseExecutor.execute(()->{
-            termTitle=mTermDAO.getCurrentTermTitle(termID);
-        });
-        try{
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-        return termTitle;
     }
 
     public void insert(Term term){
@@ -107,6 +93,18 @@ public class Repository {
     // ---------------------
     // Course queries
     // ---------------------
+    public List<Course>getAllCourses() {
+        databaseExecutor.execute(()->{
+            mAllCourses=mCourseDAO.getAllCourses();
+        });
+        try{
+            Thread.sleep(1000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        return mAllCourses;
+    }
+
     public List<Course>getAssociatedCourses(int termID) {
         databaseExecutor.execute(()->{
             mAssociatedCourses=mCourseDAO.getAssociatedCourses(termID);
@@ -117,18 +115,6 @@ public class Repository {
             e.printStackTrace();
         }
         return mAssociatedCourses;
-    }
-
-    public String getCurrentCourseTitle(int courseID){
-        databaseExecutor.execute(()->{
-            courseTitle=mCourseDAO.getCurrentCourseTitle(courseID);
-        });
-        try{
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-        return courseTitle;
     }
 
     public void insert(Course course){
@@ -190,6 +176,17 @@ public class Repository {
         }
     }
 
+    public void update(Course_Note courseNote){
+        databaseExecutor.execute(()->{
+            mNoteDAO.update(courseNote);
+        });
+        try{
+            Thread.sleep(1000);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
     public void delete(Course_Note courseNote){
         databaseExecutor.execute(()->{
             mNoteDAO.delete(courseNote);
@@ -204,17 +201,6 @@ public class Repository {
     // --------------------------
     // Assessment queries
     // --------------------------
-    public List<Assessment>getAllAssessments() {
-        databaseExecutor.execute(()->{
-            mAllAssessments=mAssessmentDAO.getAllAssessments();
-        });
-        try{
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-        return mAllAssessments;
-    }
 
     public List<Assessment>getAssociatedAssessments(int courseID) {
         databaseExecutor.execute(()->{

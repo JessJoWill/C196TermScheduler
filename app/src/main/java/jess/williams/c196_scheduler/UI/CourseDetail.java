@@ -1,6 +1,9 @@
 package jess.williams.c196_scheduler.UI;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,23 +41,30 @@ import jess.williams.c196_scheduler.R;
 public class CourseDetail extends AppCompatActivity {
     Repository repo = new Repository(getApplication());
     EditText editCourseTitle;
-    EditText editTermTitle;
     int courseID;
     int termID;
     int instructorID;
     String courseStart;
     String courseEnd;
     String courseTitle;
-    String termTitle;
     String statusStr;
+    String selectedInstructor;
+    String selectedTerm;
     TextView instructorEmail;
     TextView instructorPhone;
+    String instructorName;
     String email;
     String phone;
+    String dateFormat;
+    List<Term> mAllTerms;
     Button courseStartBtn;
     Button courseEndBtn;
     Spinner statusSpinner;
     Spinner instructorSpinner;
+    Spinner termSpinner;
+    SimpleDateFormat sdf;
+    List<Instructor> mAllInstructors = new ArrayList();
+    List<String> instructorNames = new ArrayList<>();
     DatePickerDialog.OnDateSetListener startDate;
     DatePickerDialog.OnDateSetListener endDate;
     final Calendar startCalendar = Calendar.getInstance();
@@ -71,15 +82,14 @@ public class CourseDetail extends AppCompatActivity {
         courseEnd=getIntent().getStringExtra("courseEnd");
         statusStr=getIntent().getStringExtra("courseStatus");
         instructorID=getIntent().getIntExtra("instructorId",-1);
-        String dateFormat = "MM/dd/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+        dateFormat = "MM/dd/yy";
+        sdf = new SimpleDateFormat(dateFormat, Locale.US);
         courseStartBtn=findViewById(R.id.courseStartBtn);
         courseStartBtn.setText(courseStart);
 
         courseStartBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Date date;
                 String startInfo = courseStartBtn.getText().toString();
                 try{
                     startCalendar.setTime(sdf.parse(startInfo));
@@ -97,7 +107,6 @@ public class CourseDetail extends AppCompatActivity {
         courseEndBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Date date;
                 String endInfo = courseEndBtn.getText().toString();
                 try{
                     endCalendar.setTime(sdf.parse(endInfo));
@@ -132,15 +141,36 @@ public class CourseDetail extends AppCompatActivity {
         };
 
         editCourseTitle=(EditText) findViewById(R.id.editCourseTitle);
-        editTermTitle=(EditText) findViewById(R.id.editTermTitle);
 
-        termTitle = repo.getCurrentTermTitle(termID);
+        // Term Spinner
+        termSpinner=(Spinner) findViewById(R.id.termSpinner);
+        mAllTerms = new ArrayList();
+        mAllTerms.addAll(repo.getAllTerms());
+        int termPosition = 0;
+        List<String> termNames = new ArrayList<>();
+        for(Term term : mAllTerms){
+            termNames.add(term.getTermTitle());
+            if(term.getTermID() == termID){
+                selectedTerm = term.getTermTitle();
+            }
+        }
+
+        ArrayAdapter<String> termArrayAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, termNames);
+        termArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        termSpinner.setAdapter(termArrayAdapter);
+        termPosition = termArrayAdapter.getPosition(selectedTerm);
+        termSpinner.setSelection(termPosition, false);
+
 
         int statusPosition = 0;
-        String[] courseStatus = {"In Progress", "Completed", "Dropped", "Plan to Take"};
-        for(int i=0; i<4; i++){
-            if(courseStatus[i] == statusStr);
-            statusPosition = i;
+        String[] courseStatus = {"in progress", "completed", "dropped", "plan to take"};
+        int stringSize = courseStatus.length;
+        for(int i=0; i<stringSize; i++){
+            String checkString = courseStatus[i];
+            if(Objects.equals(checkString, statusStr)) {
+                statusPosition = i;
+            }
+
         }
         // Status Spinner
         statusSpinner=(Spinner) findViewById(R.id.statusSpinner);
@@ -150,16 +180,15 @@ public class CourseDetail extends AppCompatActivity {
         statusSpinner.setSelection(statusPosition);
 
         // Instructor Spinner
-
         instructorSpinner=(Spinner) findViewById(R.id.instructorSpinner);
-        List<Instructor> mAllInstructors = new ArrayList();
+
         mAllInstructors.addAll(repo.getAllInstructors());
         int instructorPosition = 0;
-        List<String> instructorNames = new ArrayList<>();
+
         for(Instructor instructor : mAllInstructors){
             instructorNames.add(instructor.getInstructorName());
             if(instructor.getInstructorID() == instructorID){
-                instructorPosition = instructorID - 1;
+                selectedInstructor = instructor.getInstructorName();
                 email = instructor.getInstructorEmail();
                 phone = instructor.getInstructorPhone();
             }
@@ -168,23 +197,29 @@ public class CourseDetail extends AppCompatActivity {
         ArrayAdapter<String> instructorArrayAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, instructorNames);
         instructorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         instructorSpinner.setAdapter(instructorArrayAdapter);
+        instructorPosition = instructorArrayAdapter.getPosition(selectedInstructor);
         instructorSpinner.setSelection(instructorPosition, false);
 
         editCourseTitle.setText(courseTitle);
-        editTermTitle.setText(termTitle);
+
         instructorEmail = (TextView) findViewById(R.id.instructorEmailTxt);
         instructorPhone = (TextView) findViewById(R.id.instructorPhoneTxt);
 
         getInstructorDetails();
+
         instructorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                instructorID = instructorSpinner.getSelectedItemPosition();
-
-                Instructor currentInstructor = mAllInstructors.get(instructorID);
-                email = currentInstructor.getInstructorEmail();
-                phone = currentInstructor.getInstructorPhone();
-                getInstructorDetails();
+                selectedInstructor = instructorSpinner.getSelectedItem().toString();
+                for(Instructor instructor : mAllInstructors){
+                    if(instructor.getInstructorName() == selectedInstructor){
+                        instructorID = instructor.getInstructorID();
+                        instructorName = instructor.getInstructorName();
+                        email = instructor.getInstructorEmail();
+                        phone = instructor.getInstructorPhone();
+                        getInstructorDetails();
+                    }
+                }
             }
 
             @Override
@@ -223,6 +258,9 @@ public class CourseDetail extends AppCompatActivity {
         Course course;
         String start = courseStartBtn.getText().toString();
         String end = courseEndBtn.getText().toString();
+        statusStr = statusSpinner.getSelectedItem().toString();
+        courseTitle = editCourseTitle.getText().toString();
+
 
         if(courseID == -1){
             course = new Course(termID, courseTitle, start, end, statusStr,instructorID);
@@ -231,6 +269,7 @@ public class CourseDetail extends AppCompatActivity {
         } else {
             course = new Course(courseID, termID, courseTitle, start, end,statusStr,instructorID);
             repo.update(course);
+            finish();
         }
     }
 
@@ -246,12 +285,26 @@ public class CourseDetail extends AppCompatActivity {
                 return true;
             case R.id.saveCourse:
                 onSave(courseID);
+                Toast.makeText(CourseDetail.this, "Course Saved", Toast.LENGTH_LONG).show();
                 finish();
                 return true;
             case R.id.deleteCourse:
-                Course course = new Course();
-                onDelete(course);
-                finish();
+
+                List<Assessment> mAssociatedAssessments = repo.getAssociatedAssessments(courseID);
+                if(mAssociatedAssessments.size() > 0){
+                    Toast.makeText(CourseDetail.this, "Cannot delete course with associated assessments.", Toast.LENGTH_LONG).show();
+                }else {
+                    Course course = new Course();
+                    onDelete(course);
+                    Toast.makeText(CourseDetail.this, "Course Deleted", Toast.LENGTH_LONG).show();
+                    finish();
+                    return true;
+                }
+            case R.id.addInstructor:
+                addInstructor();
+                return true;
+            case R.id.modInstructor:
+                modInstructor();
                 return true;
             case R.id.addAssessment:
                 addAssessment();
@@ -259,8 +312,57 @@ public class CourseDetail extends AppCompatActivity {
             case R.id.courseNotes:
                 courseNotes();
                 return true;
+            case R.id.courseStartAlert:
+                String startDateTxt=courseStartBtn.getText().toString();
+                Date startDate = null;
+                try{
+                    startDate=sdf.parse(startDateTxt);
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                Long saTrigger = startDate.getTime();
+                Intent saIntent = new Intent(CourseDetail.this, MyReceiver.class);
+                courseTitle = editCourseTitle.getText().toString();
+                saIntent.putExtra("key", courseTitle + " starts today.");
+                PendingIntent saSender = PendingIntent.getBroadcast(CourseDetail.this,MainActivity.numAlert++,saIntent,0);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP,saTrigger,saSender);
+                Toast.makeText(CourseDetail.this, "Alert Added", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.courseEndAlert:
+                String endDateTxt=courseEndBtn.getText().toString();
+                Date endDate = null;
+                try{
+                    endDate=sdf.parse(endDateTxt);
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                Long endTrigger = endDate.getTime();
+                Intent eaIntent = new Intent(CourseDetail.this, MyReceiver.class);
+                eaIntent.putExtra("key", courseTitle + " ends today.");
+                PendingIntent eaSender = PendingIntent.getBroadcast(CourseDetail.this,MainActivity.numAlert++,eaIntent,0);
+                AlarmManager eaAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                eaAlarmManager.set(AlarmManager.RTC_WAKEUP,endTrigger,eaSender);
+                Toast.makeText(CourseDetail.this, "Alert Added", Toast.LENGTH_LONG).show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addInstructor() {
+        Intent toAddInstructor = new Intent(CourseDetail.this, InstructorDetailAdd.class);
+        toAddInstructor.putExtra("courseId", courseID);
+        startActivity(toAddInstructor);
+    }
+
+    private void modInstructor() {
+        Intent toModInstructor = new Intent(CourseDetail.this, InstructorDetailMod.class);
+        toModInstructor.putExtra("courseId", courseID);
+        toModInstructor.putExtra("instructorId", instructorID);
+        toModInstructor.putExtra("instructorName", instructorName);
+        toModInstructor.putExtra("instructorPhone", phone);
+        toModInstructor.putExtra("instructorEmail", email);
+        startActivity(toModInstructor);
     }
 
     private void onDelete(Course course) {
@@ -269,19 +371,48 @@ public class CourseDetail extends AppCompatActivity {
     }
 
     private void addAssessment() {
-        Intent toAddAssessment = new Intent(CourseDetail.this, AssessmentDetail.class);
-        startActivity(toAddAssessment);
+        if(courseID == -1){
+            Toast.makeText(CourseDetail.this, "Save course before adding assessments.", Toast.LENGTH_LONG).show();
+        }else {
+            Intent toAddAssessment = new Intent(CourseDetail.this, AssessmentDetail.class);
+            toAddAssessment.putExtra("courseId", courseID);
+            startActivity(toAddAssessment);
+        }
     }
 
     private void courseNotes(){
         Intent toCourseNotes = new Intent(CourseDetail.this, CourseNotesList.class);
         toCourseNotes.putExtra("courseId", courseID);
-        toCourseNotes.putExtra("courseId", termID);
-        toCourseNotes.putExtra("courseId", courseTitle);
-        toCourseNotes.putExtra("courseId", courseStart);
-        toCourseNotes.putExtra("courseId", courseEnd);
-        toCourseNotes.putExtra("courseId", statusStr);
-        toCourseNotes.putExtra("courseId", instructorID);
+        toCourseNotes.putExtra("termId", termID);
+        toCourseNotes.putExtra("courseTitle", courseTitle);
+        toCourseNotes.putExtra("courseStart", courseStart);
+        toCourseNotes.putExtra("courseEnd", courseEnd);
+        toCourseNotes.putExtra("statusStr", statusStr);
+        toCourseNotes.putExtra("instructorID", instructorID);
         startActivity(toCourseNotes);
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
+        Repository repo = new Repository(getApplication());
+        List<Assessment> assessments = repo.getAssociatedAssessments(courseID);
+        final CourseAdapter adapter = new CourseAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setmAssessments(assessments);
+
+        mAllInstructors.clear();
+        instructorNames.clear();
+        mAllInstructors.addAll(repo.getAllInstructors());
+        for(Instructor instructor : mAllInstructors){
+            instructorNames.add(instructor.getInstructorName());
+            if(instructor.getInstructorID() == instructorID){
+                selectedInstructor = instructor.getInstructorName();
+                email = instructor.getInstructorEmail();
+                phone = instructor.getInstructorPhone();
+            }
+        }
     }
 }

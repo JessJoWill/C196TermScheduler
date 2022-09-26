@@ -1,6 +1,7 @@
 package jess.williams.c196_scheduler.UI;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,61 +19,38 @@ import java.util.List;
 import java.util.Objects;
 
 import jess.williams.c196_scheduler.Database.Repository;
+import jess.williams.c196_scheduler.Entity.Course;
 import jess.williams.c196_scheduler.Entity.Course_Note;
 import jess.williams.c196_scheduler.R;
 
 public class CourseNotesList extends AppCompatActivity {
     Repository repo = new Repository(getApplication());
-    int courseId;
-    String noteTxt;
-    EditText editNewNote;
-    FloatingActionButton floatingSaveBtn;
+    int courseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_notes);
 
-        courseId = getIntent().getIntExtra("courseId", -1);
+        courseID = getIntent().getIntExtra("courseId", -1);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RecyclerView recyclerView = findViewById(R.id.courseNotesRecyclerView);
         Repository repo = new Repository(getApplication());
-        List<Course_Note> notes = repo.getAssociatedNotes(courseId);
+        List<Course_Note> notes = repo.getAssociatedNotes(courseID);
         final CourseNotesAdapter adapter = new CourseNotesAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.setmAssociatedNotes(notes);
+
+
     }
 
-    void showNewNoteDialog(){
-        final Dialog dialog = new Dialog(CourseNotesList.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.dialog_add_note);
-
-        editNewNote = dialog.findViewById(R.id.editNewNote);
-        floatingSaveBtn = dialog.findViewById(R.id.floatingSaveBtn);
-
-        floatingSaveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSave();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    public void onSave(){
-        Course_Note courseNote;
-        noteTxt = String.valueOf(editNewNote.getText());
-        //courseID = getIntent().getIntExtra("courseID", -1);
-
-        courseNote = new Course_Note(courseId, noteTxt);
-        repo.insert(courseNote);
-
+    public void toNoteDetail(){
+        Intent intent = new Intent(CourseNotesList.this, NotesDetail.class);
+        intent.putExtra("courseId", courseID);
+        startActivity(intent);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,13 +64,21 @@ public class CourseNotesList extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.addNote:
-                showNewNoteDialog();
-                return true;
-            case R.id.cancel:
-                finish();
+                toNoteDetail();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        RecyclerView recyclerView = findViewById(R.id.courseNotesRecyclerView);
+        Repository repo = new Repository(getApplication());
+        List<Course_Note> notes = repo.getAssociatedNotes(courseID);
+        final CourseNotesAdapter adapter = new CourseNotesAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setmAssociatedNotes(notes);
     }
+}

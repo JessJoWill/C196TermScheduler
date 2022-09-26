@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="#3F51B5">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#3F51B5"
             android:text="@string/course_title"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -30,6 +31,7 @@
             android:hint="@string/enter_course_title"
             android:inputType="textPersonName"
             android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,14 +39,13 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTermTitle"
+        <Spinner
+            android:id="@+id/termSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/enter_term_title"
-            android:inputType="textPersonName"
-            android:textSize="24sp" />
+            android:minHeight="48dp"
+            android:textSize="24sp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:layout_width="match_parent"
@@ -86,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:textSize="20sp"
+            android:textSize="24sp"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
@@ -106,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <LinearLayout

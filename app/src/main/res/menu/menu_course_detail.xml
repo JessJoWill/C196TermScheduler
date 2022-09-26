@@ -8,10 +8,16 @@
         android:title="@string/save_course"/>
     <item android:id="@+id/deleteCourse"
         android:title="@string/delete_course"/>
+    <item android:id="@+id/addInstructor"
+        android:title="@string/add_instructor"/>
+    <item android:id="@+id/modInstructor"
+        android:title="@string/modify_instructor"/>
     <item android:id="@+id/addAssessment"
         android:title="@string/add_assessment"/>
     <item android:id="@+id/courseNotes"
         android:title="@string/course_notes"/>
-    <item android:id="@+id/cancel"
-        android:title="@string/cancel"/>
+    <item android:id="@+id/courseStartAlert"
+        android:title="@string/set_start_alert"/>
+    <item android:id="@+id/courseEndAlert"
+        android:title="@string/set_end_alert"/>
 </menu>

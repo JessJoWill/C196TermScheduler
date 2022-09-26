@@ -18,18 +18,25 @@ public class Course_Note {
     @PrimaryKey(autoGenerate = true)
     int noteID;
     int courseID;
-    String noteTxt;
+    String noteSubject;
+    String noteBody;
 
     @Ignore
-    public Course_Note(int noteID, int courseID, String noteTxt) {
+    public Course_Note(int noteID, int courseID, String noteSubject, String noteBody) {
         this.noteID = noteID;
         this.courseID = courseID;
-        this.noteTxt = noteTxt;
+        this.noteSubject = noteSubject;
+        this.noteBody = noteBody;
     }
 
-    public Course_Note(int courseID, String noteTxt) {
+    public Course_Note(int courseID, String noteSubject, String noteBody) {
         this.courseID = courseID;
-        this.noteTxt = noteTxt;
+        this.noteSubject = noteSubject;
+        this.noteBody = noteBody;
+    }
+
+    public Course_Note() {
+
     }
 
     public int getNoteID() {
@@ -48,11 +55,19 @@ public class Course_Note {
         this.courseID = courseID;
     }
 
-    public String getNoteTxt() {
-        return noteTxt;
+    public String getNoteSubject() {
+        return noteSubject;
     }
 
-    public void setNoteTxt(String noteTxt) {
-        this.noteTxt = noteTxt;
+    public void setNoteSubject(String noteSubject) {
+        this.noteSubject = noteSubject;
+    }
+
+    public String getNoteBody() {
+        return noteBody;
+    }
+
+    public void setNoteBody(String noteBody) {
+        this.noteBody = noteBody;
     }
 }
